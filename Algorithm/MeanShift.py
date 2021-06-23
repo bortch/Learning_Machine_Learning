@@ -26,11 +26,11 @@ class MeanShift():
         centroid_4_all_data = np.average(data, axis=0)
         log.info(f"\tGet centroid for all data: {centroid_4_all_data}")
         # compute norm of all data with the centroid
-        all_data_norm = np.linalg.norm(centroid_4_all_data)
+        all_data_norm = linalg.norm(centroid_4_all_data)
         log.info(
             f"\tCalculate vector norm of the centroid of all data: { all_data_norm }")
-        if (self.bin==None):
-          self.bin = 2
+        if (self.bin == None):
+            self.bin = 2
         self.bandwidth = all_data_norm/self.bin
         log.info(
             f"\tComputed bandwidth's bin size:\n\t({all_data_norm}/{self.bin}) = {self.bandwidth}\n")
@@ -54,7 +54,7 @@ class MeanShift():
     def _get_neighbors(self, centroid, data):
         neighbors = []
         for pts in data:
-            if np.linalg.norm(pts-centroid) < self.bandwidth:
+            if linalg.norm(pts-centroid) < self.bandwidth:
                 neighbors.append(pts)
         return np.array(neighbors)
 
@@ -62,7 +62,7 @@ class MeanShift():
         '''returns a dictionary'''
         results = {}
         for i in range(len(arr)):
-            results[i] = arr[i]
+            results[i] = np.array(arr[i])
         return results
 
     def _filter_centroids(self, _centroids):
@@ -85,9 +85,9 @@ class MeanShift():
                             # we skip as we are comparing the same entry
                             log.info(f"\tcomparison skipped")
                             pass
-                        elif np.linalg.norm(np.array(i)-np.array(j)) <= self.bandwidth:
+                        elif linalg.norm(np.array(i)-np.array(j)) <= self.bandwidth:
                             log.debug(
-                                f"as {np.linalg.norm(np.array(i)-np.array(j))}<={self.bandwidth}")
+                                f"as {linalg.norm(np.array(i)-np.array(j))}<={self.bandwidth}")
                             log.info(f"\tadd to remove: {j}")
                             to_pop.add(j)  # we mark one of them to be removed
                             break
@@ -130,8 +130,8 @@ class MeanShift():
                 distances = np.empty(len(self.centroids))
                 for i in self.centroids:
                     log.debug(
-                        f"{i} norm({feature}-{self.centroids[i]})={np.linalg.norm(feature-self.centroids[i])}")
-                    distance = np.linalg.norm(feature-self.centroids[i])
+                        f"{i} norm({feature}-{self.centroids[i]})={linalg.norm(feature-self.centroids[i])}")
+                    distance = linalg.norm(feature-self.centroids[i])
                     log.debug(
                         f"\tdistance to centroid {self.centroids}: {distance}")
                     if not distance in distances:
@@ -148,11 +148,12 @@ class MeanShift():
         log.info(f"\n{'.'*80}\nHas solution converged?")
         new = np.array(new)
         previous = np.array(previous)
-        log.debug(f"{type(previous)}, {previous.shape}\n{type(new)}, {new.shape}")
-        if(new.shape==previous.shape):
-          res = np.allclose(new, previous)
+        log.debug(
+            f"{type(previous)}, {previous.shape}\n{type(new)}, {new.shape}")
+        if(new.shape == previous.shape):
+            res = np.allclose(new, previous)
         else:
-          res = False
+            res = False
         log.info(f"is converged? {res}")
         return res
 
@@ -188,18 +189,17 @@ class MeanShift():
             new_centroids_list = self._filter_centroids(new_centroids_list)
 
             # ends centroids research if converged
-            converged = self._has_converged(new_centroids_list, prev_centroids_list)
+            converged = self._has_converged(
+                new_centroids_list, prev_centroids_list)
             log.info(
                 f"Previously centroids found: {prev_centroids_list}\n \
                 Current iteration centroids found: {new_centroids_list}")
             # assign new centroids found for potential next loop itereation
-            centroids = {}
-            for i in range(len(new_centroids_list)):
-                 centroids[i] = np.array(new_centroids_list[i])
+            centroids = self._arr_to_dict(new_centroids_list)
 
             if converged:
                 break
-            
+
             if(current_iter <= self.max_iter):
                 current_iter += 1
                 prev_centroids_list = new_centroids_list
@@ -216,6 +216,7 @@ class MeanShift():
         # Todo
         pass
 
+
 if __name__ == "__main__":
 
     from sklearn.datasets import make_blobs
@@ -227,8 +228,8 @@ if __name__ == "__main__":
     # * random_state 7    |7   |6 |5 |4    |1    |0
     # * bin          4    |3.5 |3 |5 |5.81 |2.52 |7
     n_points = 30
-    random_state = 7
-    bin = 4
+    random_state = 8
+    bin = 2.5
     X, y = make_blobs(n_samples=n_points, centers=3, center_box=(0, 10),
                       n_features=2, random_state=random_state
                       )
@@ -247,18 +248,17 @@ if __name__ == "__main__":
         color = colors[c % len(colors)]
         points = model.clusters[c]
         centroid = model.centroids[c]
-        
+
         for feature in points:
             plt.scatter(feature[0], feature[1], marker="o",
                         c=color, s=50, linewidths=1, zorder=10, alpha=0.2)
-        
+
         # define a radius to circle the cluster
-        norm_cluster = linalg.norm(points-centroid, axis=1)
-        radius = max(norm_cluster)
+        radius = max(linalg.norm(points-centroid, axis=1))
         plt.scatter(centroid[0], centroid[1], c=color, marker='+', s=150)
         x, y = (np.cos(theta) * radius) + \
             centroid[0], (np.sin(theta) * radius) + centroid[1]
         plt.plot(x, y, linewidth=1, color=color)
-        plt.fill_between(x, y,facecolor=color,alpha=0.1)
+        plt.fill_between(x, y, facecolor=color, alpha=0.1)
 
     plt.show()

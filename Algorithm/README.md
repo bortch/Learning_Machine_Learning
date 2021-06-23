@@ -4,7 +4,13 @@
 
 What better way to learn an algorithm than to dive into the code and try to understand what is being done?
 
-*answer*: Dive into the code and try to re-code the algorithm (without presumption), with the goal of achieving an acceptable result or at least a result ;)
+Answer: *Dive into the code and try to re-code the algorithm (without presumption), with the goal of achieving an acceptable result or at least a result* ;)
+
+## Disclaimer
+
+This implementation of MeanShift is crude and not at all optimised.
+
+The implementation is not finished and could be greatly improved.
 
 ## Pseudo-code
 
@@ -63,5 +69,6 @@ python MeanShift.py
 
 Here is an example of the results obtained using this implementation.
 
+![Output 30 points, 3 clusters, between 0 and 100](MeanShift_output_pts_30_rnd_8_bin_2.5.png)
 ![Output 30 points, 3 clusters, between 0 and 100](MeanShift_output_pts_30_rnd_7_bin_4.png)
 
