@@ -7,7 +7,13 @@ style.use("ggplot")
 
 
 class MeanShift():
-    """docstring for MeanShift."""
+    """Meanshift - learning by doing
+
+    Keyword arguments:
+    bandwidth -- the windows size (default None)
+    bin -- Chunk the Bandwidth in small parts (default None)
+    max_iter -- Maximum iteration Number (default 300)
+    """
 
     def __init__(self, bandwidth=None, bin=None, max_iter=300):
         self.bandwidth = bandwidth
@@ -207,11 +213,8 @@ class MeanShift():
         return self
 
     def predict(self, data):
-        # compare distance to either centroid
-        distances = [np.linalg.norm(data-self.centroids[centroid])
-                     for centroid in self.centroids]
-        classification = (distances.index(min(distances)))
-        return classification
+        # Todo
+        pass
 
 if __name__ == "__main__":
 
@@ -219,9 +222,11 @@ if __name__ == "__main__":
 
     log.basicConfig(format='%(message)s', level=log.ERROR)
 
+    # Examples of parameters values:
+    # * n_points    :30   |15
+    # * random_state 7    |7   |6 |5 |4    |1    |0
+    # * bin          4    |3.5 |3 |5 |5.81 |2.52 |7
     n_points = 30
-    #random_state #7   #6 #5 #4    #1    #0
-    #bin          #3.5 #3 #5 #5.81 #2.52 #7
     random_state = 7
     bin = 4
     X, y = make_blobs(n_samples=n_points, centers=3, center_box=(0, 10),
