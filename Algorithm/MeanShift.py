@@ -1,5 +1,5 @@
 import numpy as np
-from numpy import linalg, mod
+from numpy import linalg
 from sklearn.metrics.pairwise import euclidean_distances
 from matplotlib import pyplot as plt, style
 import logging as log
