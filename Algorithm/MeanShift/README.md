@@ -55,7 +55,7 @@ python MeanShift.py
 
 ## Results
 
-Here is an example of the results obtained using this implementation.
+Here is an example of the results obtained using my own implementation.
 
 ![Output 30 points, 3 clusters, between 0 and 100](MeanShift_output_pts_30_rnd_8_bin_2.5.png)
 ![Output 30 points, 3 clusters, between 0 and 100](MeanShift_output_pts_30_rnd_7_bin_4.png)
@@ -68,7 +68,7 @@ Answer: *Dive into the code and try to re-code the algorithm (without presumptio
 
 ## Disclaimer
 
-This implementation of MeanShift is crude and not at all optimised.
+This implementation of MeanShift is raw and not at all optimised.
 
 The implementation is not finished and could be greatly improved.
 
